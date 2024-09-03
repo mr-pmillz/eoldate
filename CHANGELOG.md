@@ -2,7 +2,17 @@
 
 All notable changes to this project will be documented [here](https://github.com/mr-pmillz/eoldate/blob/main/CHANGELOG.md?ref_type=heads)
 
-## [unreleased]
+## [0.0.4](https://github.com/mr-pmillz/eoldate/-/compare/v0.0.3...v0.0.4) - 2024-09-03
+
+### 🧪 Testing
+
+- Testing github goreleaser release notes from git-cliff artifact - ([efbb3e6](https://github.com/mr-pmillz/eoldate/-/commit/efbb3e60ec3e9a4da09ec06a8d8c3948c21d1ed8))
+
+### 🛠 Improvements
+
+- Update CHANGELOG.md - ([3dfaae1](https://github.com/mr-pmillz/eoldate/-/commit/3dfaae17b22d03532f36613d2d2174085f34d6dc))
+
+## [0.0.3](https://github.com/mr-pmillz/eoldate/-/compare/v0.0.2...v0.0.3) - 2024-09-03
 
 ### ✨ New features
 
