@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented [here](https://github.com/mr-pmillz/eoldate/blob/main/CHANGELOG.md?ref_type=heads)
 
+## [unreleased]
+
+### ✨ New features
+
+- Added changelog generation to cicd - ([bdc60ab](https://github.com/mr-pmillz/eoldate/-/commit/bdc60ab253fd8bbeb6d3cce27c94d7ac91bd12ec))
+
+### ⚙️ Miscellaneous
+
+- Show usage when no flags specified - ([8bf2224](https://github.com/mr-pmillz/eoldate/-/commit/8bf22248442e7e5b45d9bd2987bf675201dc3d77))
+
+## [0.0.2](https://github.com/mr-pmillz/eoldate/-/compare/v0.0.1...v0.0.2) - 2024-09-03
+
+### ⚙️ Miscellaneous
+
+- Release v0.0.2 - ([855ff22](https://github.com/mr-pmillz/eoldate/-/commit/855ff2272fa8ae94493965630314f9c047c64149))
+
 ## [0.0.1] - 2024-09-03
 
 ### ⚙️ Miscellaneous
