@@ -4,7 +4,7 @@
 
 An End of Life Date API SDK written in Go
 
-This is a fairly simple wrapper around the endoflife.date API
+This is a wrapper around the endoflife.date API
 [Read the Docs](https://endoflife.date/docs/api)
 
 ## Installation

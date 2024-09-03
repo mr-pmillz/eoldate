@@ -52,6 +52,11 @@ func main() {
 		os.Exit(0)
 	}
 
+	if eolOptions.Tech == "" {
+		gologger.Info().Msg("No technologies specified")
+		flag.Usage()
+		os.Exit(1)
+	}
 	releaseVersions, err := client.GetProduct(eolOptions.Tech)
 	if err != nil {
 		fmt.Printf("Error fetching product data: %v\n", err)
