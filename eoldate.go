@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-const CurrentVersion = `v0.0.3`
+const CurrentVersion = `v0.0.4`
 const EOLBaseURL = "https://endoflife.date/api"
 
 // Options ...
