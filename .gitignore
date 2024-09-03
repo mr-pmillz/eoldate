@@ -9,3 +9,9 @@
 *.csv
 eoldate
 RELEASE_CHANGELOG.md
+release_notes
+release_notes/
+release_notes/*
+coverage
+coverage/
+coverage/*

@@ -81,11 +81,16 @@ jobs:
           OUTPUT: RELEASE_CHANGELOG.md
           GITHUB_REPO: ${{ github.repository }}
 
+      - name: copy release changelog
+        run: |
+          mkdir -p release_notes
+          cat RELEASE_CHANGELOG.md > release_notes/RELEASE_CHANGELOG.md
+
       - name: upload release changelog
         uses: actions/upload-artifact@master
         with:
           name: release-changelog
-          path: RELEASE_CHANGELOG.md
+          path: release_notes
 
   # ================
   # RELEASE JOB
@@ -117,7 +122,7 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: release-changelog
-          path: RELEASE_CHANGELOG.md
+          path: release_notes
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v5
@@ -125,7 +130,7 @@ jobs:
         with:
           distribution: goreleaser
           version: latest
-          args: release --clean --release-notes RELEASE_CHANGELOG.md
+          args: release --clean --release-notes release_notes/RELEASE_CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
