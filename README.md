@@ -1,5 +1,14 @@
 # eoldate
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/mr-pmillz/eoldate)](https://goreportcard.com/report/github.com/mr-pmillz/eoldate)
+![GitHub all releases](https://img.shields.io/github/downloads/mr-pmillz/eoldate/total?style=social)
+![GitHub repo size](https://img.shields.io/github/repo-size/mr-pmillz/eoldate?style=plastic)
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/mr-pmillz/eoldate?style=plastic)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/mr-pmillz/eoldate?style=plastic)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/mr-pmillz/eoldate?style=plastic)
+[![Twitter](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fmr-pmillz%2Feoldate)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fmr-pmillz%2Feoldate)
+[![CI](https://github.com/mr-pmillz/eoldate/actions/workflows/ci.yml/badge.svg)](https://github.com/mr-pmillz/eoldate/actions/workflows/ci.yml)
+
 ## About
 
 An End of Life Date API SDK written in Go
