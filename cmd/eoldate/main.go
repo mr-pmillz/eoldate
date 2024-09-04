@@ -65,9 +65,11 @@ func main() {
 	// Create a new table
 	tableString := &strings.Builder{}
 	table := tablewriter.NewWriter(tableString)
-	table.SetHeader([]string{"Cycle", "Release Date", "EOL Date", "Latest", "Latest Release Date", "LTS", "Support"})
+	table.SetHeader([]string{"Cycle", "Release Date", "EOL Date", "Latest", "Link", "Latest Release Date", "LTS", "Support", "Extended Support"})
 
 	table.SetHeaderColor(
+		tablewriter.Colors{tablewriter.Bold, tablewriter.FgHiYellowColor, tablewriter.BgBlackColor},
+		tablewriter.Colors{tablewriter.Bold, tablewriter.FgHiYellowColor, tablewriter.BgBlackColor},
 		tablewriter.Colors{tablewriter.Bold, tablewriter.FgHiYellowColor, tablewriter.BgBlackColor},
 		tablewriter.Colors{tablewriter.Bold, tablewriter.FgHiYellowColor, tablewriter.BgBlackColor},
 		tablewriter.Colors{tablewriter.Bold, tablewriter.FgHiYellowColor, tablewriter.BgBlackColor},
@@ -91,22 +93,24 @@ func main() {
 				fmt.Println("Error parsing date:", err)
 				continue
 			}
-			row = []string{release.Cycle, release.ReleaseDate, release.EOL.(string), release.Latest, release.LatestReleaseDate, fmt.Sprintf("%t", release.LTS), release.Support}
+			row = []string{release.Cycle, release.ReleaseDate, release.EOL.(string), release.Latest, release.Link, release.LatestReleaseDate, fmt.Sprintf("%s", release.LTS), fmt.Sprintf("%s", release.Support), fmt.Sprintf("%s", release.ExtendedSupport)}
 		}
 		if rt.Kind() == reflect.Bool {
 			EOLIsBool = true
-			row = []string{release.Cycle, release.ReleaseDate, "N/A", release.Latest, release.LatestReleaseDate, fmt.Sprintf("%t", release.LTS), release.Support}
+			row = []string{release.Cycle, release.ReleaseDate, "N/A", release.Latest, release.Link, release.LatestReleaseDate, fmt.Sprintf("%s", release.LTS), fmt.Sprintf("%s", release.Support), fmt.Sprintf("%s", release.ExtendedSupport)}
 		}
 
 		// Check if EOL date is older or later than the current date
 		if eolDateTime.Before(currentDate) && !EOLIsBool {
-			table.Rich(row, []tablewriter.Colors{{}, {}, tablewriter.Colors{tablewriter.FgRedColor}, {}, {}, {}, {}})
+			table.Rich(row, []tablewriter.Colors{{}, {}, {tablewriter.FgRedColor}, {}, {}, {}, {}})
 		} else {
-			table.Rich(row, []tablewriter.Colors{{}, {}, tablewriter.Colors{tablewriter.FgGreenColor}, {}, {}, {}, {}})
+			table.Rich(row, []tablewriter.Colors{{}, {}, {tablewriter.FgGreenColor}, {}, {}, {}, {}})
 		}
 	}
 
 	table.SetColumnAlignment([]int{
+		tablewriter.ALIGN_CENTER,
+		tablewriter.ALIGN_CENTER,
 		tablewriter.ALIGN_CENTER,
 		tablewriter.ALIGN_CENTER,
 		tablewriter.ALIGN_CENTER,
@@ -120,6 +124,8 @@ func main() {
 	table.SetRowLine(true)
 	table.SetFooter([]string{
 		strings.ToUpper(eolOptions.Tech),
+		"",
+		"",
 		"",
 		"",
 		"",

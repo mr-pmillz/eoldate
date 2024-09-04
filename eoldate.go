@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-const CurrentVersion = `v0.0.4`
+const CurrentVersion = `v0.0.5`
 const EOLBaseURL = "https://endoflife.date/api"
 
 // Options ...
@@ -24,9 +24,11 @@ type Product struct {
 	ReleaseDate       string      `json:"releaseDate,omitempty"`
 	EOL               interface{} `json:"eol,omitempty"`
 	Latest            string      `json:"latest,omitempty"`
+	Link              string      `json:"link,omitempty"`
 	LatestReleaseDate string      `json:"latestReleaseDate,omitempty"`
-	LTS               bool        `json:"lts,omitempty"`
-	Support           string      `json:"support,omitempty"`
+	LTS               interface{} `json:"lts,omitempty"`
+	Support           interface{} `json:"support,omitempty"`
+	ExtendedSupport   interface{} `json:"extendedSupport,omitempty"`
 }
 
 type AllProducts []string
