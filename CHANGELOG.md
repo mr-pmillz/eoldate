@@ -2,7 +2,13 @@
 
 All notable changes to this project will be documented [here](https://github.com/mr-pmillz/eoldate/blob/main/CHANGELOG.md?ref_type=heads)
 
-## [0.0.4](https://github.com/mr-pmillz/eoldate/-/compare/v0.0.3...v0.0.4) - 2024-09-03
+## [0.0.5](https://github.com/mr-pmillz/eoldate/-/compare/v0.0.4...v0.0.5) - 2024-09-04
+
+### ✨ New features
+
+- Added additional product types, link, extended support - ([2bfc22d](https://github.com/mr-pmillz/eoldate/-/commit/2bfc22df5bc2d6299a4bcce803ace4547ffec8d3))
+
+## [0.0.4] - 2024-09-03
 
 ### 🧪 Testing
 
