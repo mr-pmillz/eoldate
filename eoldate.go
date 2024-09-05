@@ -20,15 +20,17 @@ type Options struct {
 
 // Product represents the structure of the JSON data
 type Product struct {
-	Cycle             string      `json:"cycle,omitempty"`
-	ReleaseDate       string      `json:"releaseDate,omitempty"`
-	EOL               interface{} `json:"eol,omitempty"`
-	Latest            string      `json:"latest,omitempty"`
-	Link              string      `json:"link,omitempty"`
-	LatestReleaseDate string      `json:"latestReleaseDate,omitempty"`
-	LTS               interface{} `json:"lts,omitempty"`
-	Support           interface{} `json:"support,omitempty"`
-	ExtendedSupport   interface{} `json:"extendedSupport,omitempty"`
+	Cycle                string      `json:"cycle,omitempty"`
+	ReleaseDate          string      `json:"releaseDate,omitempty"`
+	EOL                  interface{} `json:"eol,omitempty"`
+	Latest               string      `json:"latest,omitempty"`
+	Link                 string      `json:"link,omitempty"`
+	LatestReleaseDate    string      `json:"latestReleaseDate,omitempty"`
+	LTS                  interface{} `json:"lts,omitempty"`
+	Support              interface{} `json:"support,omitempty"`
+	ExtendedSupport      interface{} `json:"extendedSupport,omitempty"`
+	MinJavaVersion       *float64    `json:"minJavaVersion,omitempty"`
+	SupportedPHPVersions string      `json:"supportedPHPVersions,omitempty"`
 }
 
 type AllProducts []string
@@ -40,10 +42,10 @@ type Client struct {
 }
 
 // NewClient creates a new API client with the given base URL.
-func NewClient(baseURL string) *Client {
+func NewClient() *Client {
 	return &Client{
 		httpClient: &http.Client{},
-		baseURL:    baseURL,
+		baseURL:    EOLBaseURL,
 	}
 }
 
