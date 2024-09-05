@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented [here](https://github.com/mr-pmillz/eoldate/blob/main/CHANGELOG.md?ref_type=heads)
 
+## [0.0.8](https://github.com/mr-pmillz/eoldate/compare/v0.0.7...v0.0.8) - 2024-09-05
+
+### 🛠 Improvements
+
+- Update CHANGELOG.md - ([45feb89](https://github.com/mr-pmillz/eoldate/commit/45feb8993a3e6971909b1d48c116c2e79ea57386))
+
+### ⚙️ Miscellaneous
+
+- Version bump - ([81c5229](https://github.com/mr-pmillz/eoldate/commit/81c52299825e9c39e3ded6a0a0c56a8c47aa37ab))
+- Extra crispy crucial :spy: - ([3c47225](https://github.com/mr-pmillz/eoldate/commit/3c47225cd5ac736b8f74a3e6de5dffec3d8b61be))
+
 ## [0.0.7](https://github.com/mr-pmillz/eoldate/compare/v0.0.6...v0.0.7) - 2024-09-05
 
 ### 🛠 Improvements
