@@ -2,11 +2,20 @@
 
 All notable changes to this project will be documented [here](https://github.com/mr-pmillz/eoldate/blob/main/CHANGELOG.md?ref_type=heads)
 
-## [unreleased]
+## [0.0.6](https://github.com/mr-pmillz/eoldate/compare/v0.0.5...v0.0.6) - 2024-09-05
+
+### ⚡ Performance
+
+- Optimized code, dynamic table columns - ([55f3590](https://github.com/mr-pmillz/eoldate/commit/55f3590510073e402c9ba8ab234c13d56b082535))
 
 ### 🛠 Improvements
 
+- Update README.md CHANGELOG.md cliff.toml - ([d398e29](https://github.com/mr-pmillz/eoldate/commit/d398e29f3840565fbf14dc86841049681a668882))
 - Update CHANGELOG.md - ([0d148dd](https://github.com/mr-pmillz/eoldate/commit/0d148dd3f92802ec48cd1e4933dc9376d83112e8))
+
+### ⚙️ Miscellaneous
+
+- Moe betta - ([b315a3e](https://github.com/mr-pmillz/eoldate/commit/b315a3e7ce6db0c9ef4b7f27e13d994e2f4947d6))
 
 ## [0.0.5](https://github.com/mr-pmillz/eoldate/compare/v0.0.4...v0.0.5) - 2024-09-04
 
