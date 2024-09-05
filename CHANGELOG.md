@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented [here](https://github.com/mr-pmillz/eoldate/blob/main/CHANGELOG.md?ref_type=heads)
 
+## [0.0.9](https://github.com/mr-pmillz/eoldate/compare/v0.0.8...v0.0.9) - 2024-09-05
+
+### 🛠 Improvements
+
+- Update CHANGELOG.md - ([2bf0d92](https://github.com/mr-pmillz/eoldate/commit/2bf0d922f0f6fde30e4d5435dac4760f85213a35))
+
+### ⚙️ Miscellaneous
+
+- Version bump - ([ed8760a](https://github.com/mr-pmillz/eoldate/commit/ed8760a8f2e434807a8ebdcaf182e7253e9cbeff))
+- Resolved linter warnings - ([1264fb9](https://github.com/mr-pmillz/eoldate/commit/1264fb9ac842226f201191ccf7fe241dfc5dec5f))
+
 ## [0.0.8](https://github.com/mr-pmillz/eoldate/compare/v0.0.7...v0.0.8) - 2024-09-05
 
 ### 🛠 Improvements
