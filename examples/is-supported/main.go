@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/mr-pmillz/eoldate"
 	"log"
+
+	"github.com/mr-pmillz/eoldate"
 )
 
 func main() {
@@ -13,21 +14,19 @@ func main() {
 		log.Fatalf("Error fetching product data: %v", err)
 	}
 
-	versionToCheck := 7.4
+	versionsToCheck := []float64{5.6, 7.4, 8.0, 8.1, 8.2}
 
-	for _, product := range products {
-		supported, err := product.IsVersionSupported(versionToCheck)
+	for _, version := range versionsToCheck {
+		supported, err := products.IsVersionSupported(version)
 		if err != nil {
+			fmt.Printf("PHP %.1f: %v\n", version, err)
 			continue
 		}
 
 		if supported {
-			fmt.Printf("PHP %.1f is still supported\n", versionToCheck)
+			fmt.Printf("PHP %.1f is still supported\n", version)
 		} else {
-			fmt.Printf("PHP %.1f is no longer supported\n", versionToCheck)
+			fmt.Printf("PHP %.1f is no longer supported\n", version)
 		}
-		return // Exit after finding the matching cycle
 	}
-
-	fmt.Printf("PHP %.1f was not found in any product cycle\n", versionToCheck)
 }

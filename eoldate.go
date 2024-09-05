@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-const CurrentVersion = `v0.0.6`
+const CurrentVersion = `v0.0.7`
 const EOLBaseURL = "https://endoflife.date/api"
 
 // Options ...
@@ -68,23 +68,24 @@ func (p *Product) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// IsVersionSupported checks if the given version is supported in this product cycle
-func (p *Product) IsVersionSupported(version float64) (bool, error) {
-	productCycle, err := strconv.ParseFloat(p.Cycle, 64)
-	if err != nil {
-		return false, fmt.Errorf("invalid cycle version: %s", p.Cycle)
-	}
-
-	if productCycle == version {
-		eolDate, err := p.GetEOLDate()
+// IsVersionSupported checks if the given version is supported in any of the product cycles
+func (p Products) IsVersionSupported(version float64) (bool, error) {
+	for _, product := range p {
+		productCycle, err := strconv.ParseFloat(product.Cycle, 64)
 		if err != nil {
-			return false, err
+			continue // Skip invalid cycles
 		}
 
-		return time.Now().Before(eolDate), nil
-	}
+		if productCycle == version {
+			eolDate, err := product.GetEOLDate()
+			if err != nil {
+				return false, err
+			}
 
-	return false, fmt.Errorf("version %.1f does not match this product cycle %.1f", version, productCycle)
+			return time.Now().Before(eolDate), nil
+		}
+	}
+	return false, fmt.Errorf("version %.1f not found in any product cycle", version)
 }
 
 // GetEOLDate returns the end-of-life date for the product
@@ -144,14 +145,17 @@ func (c *Client) Get(endpoint string) ([]byte, error) {
 	return io.ReadAll(resp.Body)
 }
 
+// Products represents a collection of Product
+type Products []Product
+
 // GetProduct fetches the end-of-life information for a specific product.
-func (c *Client) GetProduct(product string) ([]Product, error) {
+func (c *Client) GetProduct(product string) (Products, error) {
 	data, err := c.Get(fmt.Sprintf("%s.json", product))
 	if err != nil {
 		return nil, err
 	}
 
-	var products []Product
+	var products Products
 	err = json.Unmarshal(data, &products)
 	return products, err
 }
