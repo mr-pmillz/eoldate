@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-const CurrentVersion = `v0.0.7`
+const CurrentVersion = `v0.0.8`
 const EOLBaseURL = "https://endoflife.date/api"
 
 // Options ...
