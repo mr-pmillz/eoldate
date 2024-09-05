@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented [here](https://github.com/mr-pmillz/eoldate/blob/main/CHANGELOG.md?ref_type=heads)
 
+## [0.0.7](https://github.com/mr-pmillz/eoldate/compare/v0.0.6...v0.0.7) - 2024-09-05
+
+### 🛠 Improvements
+
+- Update CHANGELOG.md - ([e1594de](https://github.com/mr-pmillz/eoldate/commit/e1594deb64b02903892a87140daaf8ebb4dcd8b0))
+
+### ⚙️ Miscellaneous
+
+- Much moe betta - ([4d38a27](https://github.com/mr-pmillz/eoldate/commit/4d38a27a87471e14ae25002146de498d76b2ac7e))
+
 ## [0.0.6](https://github.com/mr-pmillz/eoldate/compare/v0.0.5...v0.0.6) - 2024-09-05
 
 ### ⚡ Performance
