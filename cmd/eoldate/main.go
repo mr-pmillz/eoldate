@@ -117,7 +117,7 @@ func NewTableBuilder(products []eoldate.Product) *TableBuilder {
 	return tb
 }
 
-// determineHeaders identifies all unique keys across all products with non-empty values
+// determineHeaders identifies all unique keys across all products
 func (tb *TableBuilder) determineHeaders() {
 	headerSet := make(map[string]bool)
 	for _, product := range tb.products {
@@ -128,17 +128,11 @@ func (tb *TableBuilder) determineHeaders() {
 			if field.Name != "AdditionalFields" {
 				tag := field.Tag.Get("json")
 				if tag != "" && tag != "-" {
-					tagName := strings.Split(tag, ",")[0]
-					fieldValue := v.Field(i).Interface()
-					if !isEmptyValue(fieldValue) {
-						headerSet[tagName] = true
+					headerName := strings.Split(tag, ",")[0]
+					if !isEmptyValue(v.Field(i).Interface()) {
+						headerSet[headerName] = true
 					}
 				}
-			}
-		}
-		for key, value := range product.AdditionalFields {
-			if !isEmptyValue(value) {
-				headerSet[key] = true
 			}
 		}
 	}
@@ -182,21 +176,16 @@ func (tb *TableBuilder) buildRows() {
 	for _, product := range tb.products {
 		row := make([]string, len(tb.headers))
 		v := reflect.ValueOf(product)
-		t := v.Type()
 		for i, header := range tb.headers {
 			value := ""
-			for j := 0; j < v.NumField(); j++ {
-				field := t.Field(j)
-				if field.Name == "AdditionalFields" {
-					continue
-				}
-				tag := field.Tag.Get("json")
-				if tag != "" && tag != "-" && strings.Split(tag, ",")[0] == header {
-					value = tb.formatValue(v.Field(j).Interface())
-					break
-				}
+			field := v.FieldByNameFunc(func(n string) bool {
+				f, _ := v.Type().FieldByName(n)
+				return strings.EqualFold(strings.Split(f.Tag.Get("json"), ",")[0], header)
+			})
+			if field.IsValid() {
+				value = tb.formatValue(field.Interface())
 			}
-			if value == "" {
+			if value == "" || value == "N/A" {
 				if val, ok := product.AdditionalFields[header]; ok {
 					value = tb.formatValue(val)
 				}
@@ -221,6 +210,14 @@ func (tb *TableBuilder) formatValue(v interface{}) string {
 			return fmt.Sprintf("%.0f", value)
 		}
 		return fmt.Sprintf("%.2f", value)
+	case *float64:
+		if value == nil {
+			return "N/A"
+		}
+		if *value == float64(int64(*value)) {
+			return fmt.Sprintf("%.0f", *value)
+		}
+		return fmt.Sprintf("%.2f", *value)
 	case bool:
 		return fmt.Sprintf("%t", value)
 	case time.Time:

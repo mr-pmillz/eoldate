@@ -20,9 +20,27 @@ This is a wrapper around the endoflife.date API
 
 To install, just run the below command or download pre-compiled binary from the [releases page](https://github.com/mr-pmillz/eoldate/releases)
 
-```bash
+```shell
 go install -v github.com/mr-pmillz/eoldate/cmd/eoldate@latest
 ```
+
+## Usage
+
+```shell
+Usage of ./eoldate:
+  -getall
+        get all results from all technologies
+  -o string
+        output directory to save results to
+  -t string
+        technology/software name to lookup
+  -version
+        show version and exit
+```
+
+## Example Output
+
+![Demo](img/eoldate-demo.png)
 
 ## eoldate as a library
 

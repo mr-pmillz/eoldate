@@ -32,7 +32,7 @@ type Product struct {
 	Support              interface{}            `json:"support,omitempty"`
 	ExtendedSupport      interface{}            `json:"extendedSupport,omitempty"`
 	MinJavaVersion       *float64               `json:"minJavaVersion,omitempty"`
-	SupportedPHPVersions string                 `json:"supportedPHPVersions,omitempty"`
+	SupportedPHPVersions interface{}            `json:"supportedPHPVersions,omitempty"`
 	AdditionalFields     map[string]interface{} `json:"-"`
 }
 
@@ -66,6 +66,18 @@ func (p *Product) UnmarshalJSON(data []byte) error {
 	}
 
 	return nil
+}
+
+// GetSupportedPHPVersions returns the supported PHP versions as a string
+func (p *Product) GetSupportedPHPVersions() string {
+	switch v := p.SupportedPHPVersions.(type) {
+	case string:
+		return v
+	case float64:
+		return fmt.Sprintf("%.1f", v)
+	default:
+		return "N/A"
+	}
 }
 
 // IsVersionSupported checks if the given version is supported in any of the product cycles
