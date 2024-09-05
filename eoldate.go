@@ -9,8 +9,11 @@ import (
 	"time"
 )
 
-const CurrentVersion = `v0.0.8`
-const EOLBaseURL = "https://endoflife.date/api"
+const (
+	CurrentVersion = `v0.0.8`
+	EOLBaseURL     = "https://endoflife.date/api"
+	NotAvailable   = "N/A"
+)
 
 // Options ...
 type Options struct {

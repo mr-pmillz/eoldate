@@ -185,7 +185,7 @@ func (tb *TableBuilder) buildRows() {
 			if field.IsValid() {
 				value = tb.formatValue(field.Interface())
 			}
-			if value == "" || value == "N/A" {
+			if value == "" || value == eoldate.NotAvailable {
 				if val, ok := product.AdditionalFields[header]; ok {
 					value = tb.formatValue(val)
 				}
@@ -199,7 +199,7 @@ func (tb *TableBuilder) buildRows() {
 // formatValue converts an interface{} value to a string representation
 func (tb *TableBuilder) formatValue(v interface{}) string {
 	if v == nil {
-		return "N/A"
+		return eoldate.NotAvailable
 	}
 
 	switch value := v.(type) {
@@ -212,7 +212,7 @@ func (tb *TableBuilder) formatValue(v interface{}) string {
 		return fmt.Sprintf("%.2f", value)
 	case *float64:
 		if value == nil {
-			return "N/A"
+			return eoldate.NotAvailable
 		}
 		if *value == float64(int64(*value)) {
 			return fmt.Sprintf("%.0f", *value)
