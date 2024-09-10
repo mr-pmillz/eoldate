@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented [here](https://github.com/mr-pmillz/eoldate/blob/main/CHANGELOG.md?ref_type=heads)
 
+## [1.0.0](https://github.com/mr-pmillz/eoldate/compare/v0.0.9...v1.0.0) - 2024-09-10
+
+### ✨ New features
+
+- Added local file caching - ([248e77c](https://github.com/mr-pmillz/eoldate/commit/248e77cba1203a48dd4033c1ca46334721e2ec34))
+
+### 🛠 Improvements
+
+- Update CHANGELOG.md - ([0416601](https://github.com/mr-pmillz/eoldate/commit/04166019743f59748817824f60e38e8df5d83eb9))
+
 ## [0.0.9](https://github.com/mr-pmillz/eoldate/compare/v0.0.8...v0.0.9) - 2024-09-05
 
 ### 🛠 Improvements
