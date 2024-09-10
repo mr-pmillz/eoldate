@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	CurrentVersion = `v1.0.2`
+	CurrentVersion = `v1.0.3`
 	EOLBaseURL     = "https://endoflife.date/api"
 	NotAvailable   = "N/A"
 )
@@ -112,7 +112,10 @@ func (p Products) GetLatestSupportedVersion() (*semver.Version, error) {
 	for _, product := range p {
 		version, err := semver.NewVersion(product.Latest)
 		if err != nil {
-			continue // Skip invalid versions
+			version, err = semver.NewVersion(product.Cycle)
+			if err != nil {
+				continue
+			}
 		}
 		if latestVersion == nil || version.GreaterThan(latestVersion) {
 			latestVersion = version
