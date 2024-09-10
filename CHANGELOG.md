@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented [here](https://github.com/mr-pmillz/eoldate/blob/main/CHANGELOG.md?ref_type=heads)
 
+## [1.0.1](https://github.com/mr-pmillz/eoldate/compare/v1.0.0...v1.0.1) - 2024-09-10
+
+### ✨ New features
+
+- Added semver for semantic versioning support compairsons - ([5aca6c4](https://github.com/mr-pmillz/eoldate/commit/5aca6c4a4cffcebb683dbefc1bdb472cb33a0b3d))
+
+### ⚡ Performance
+
+- Optimized IsSupportedSoftwareVersion and IsVersionSupported funcs - ([5aca6c4](https://github.com/mr-pmillz/eoldate/commit/5aca6c4a4cffcebb683dbefc1bdb472cb33a0b3d))
+
+### 🛠 Improvements
+
+- Update CHANGELOG.md - ([c229b83](https://github.com/mr-pmillz/eoldate/commit/c229b83431eba0723561ae4456e28ee5dbafeab5))
+
 ## [1.0.0](https://github.com/mr-pmillz/eoldate/compare/v0.0.9...v1.0.0) - 2024-09-10
 
 ### ✨ New features
