@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented [here](https://github.com/mr-pmillz/eoldate/blob/main/CHANGELOG.md?ref_type=heads)
 
+## [1.0.3](https://github.com/mr-pmillz/eoldate/compare/v1.0.2...v1.0.3) - 2024-09-10
+
+### ⚡ Performance
+
+- Optimized latest version edge case handling - ([9fef918](https://github.com/mr-pmillz/eoldate/commit/9fef91897a92bea3265e3dabd5efd79d839c54d8))
+
+### 📦 Dependencies
+
+- Dependency bumped versions - ([9fef918](https://github.com/mr-pmillz/eoldate/commit/9fef91897a92bea3265e3dabd5efd79d839c54d8))
+
+### 🛠 Improvements
+
+- Update CHANGELOG.md - ([3ff3992](https://github.com/mr-pmillz/eoldate/commit/3ff3992791c68475b2cc62e971987bd30bb507f0))
+
+### ⚙️ Miscellaneous
+
+- Removed comment from README.md example code - ([6fa085a](https://github.com/mr-pmillz/eoldate/commit/6fa085a8275b4a4f1065bbf0f4d0434681d6aaed))
+
 ## [1.0.2](https://github.com/mr-pmillz/eoldate/compare/v1.0.1...v1.0.2) - 2024-09-10
 
 ### ✨ New features
