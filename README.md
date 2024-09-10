@@ -59,15 +59,15 @@ import (
 func main() {
 	client := eoldate.NewClient()
 	softwareName := "php"
-	phpVersion := 8.2
-	isPHPEightPointTwoSupported, err := client.IsSupportedSoftwareVersion(softwareName, phpVersion)
+	phpVersion := "7.4.33"
+	isPHPVersionSupported, err := client.IsSupportedSoftwareVersion(softwareName, phpVersion)
 	if err != nil {
 		log.Fatal(err)
 	}
-	if isPHPEightPointTwoSupported {
-		fmt.Printf("%s %.1f is Supported", softwareName, phpVersion)
+	if isPHPVersionSupported {
+		fmt.Printf("%s %s is Supported", softwareName, phpVersion)
 	} else {
-		fmt.Printf("%s %.1f is not Supported", softwareName, phpVersion)
+		fmt.Printf("%s %s is not Supported", softwareName, phpVersion)
 	}
 }
 ```
