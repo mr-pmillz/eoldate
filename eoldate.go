@@ -3,15 +3,15 @@ package eoldate
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/Masterminds/semver/v3"
 	"io"
 	"net/http"
 	"slices"
-	"strconv"
 	"time"
 )
 
 const (
-	CurrentVersion = `v1.0.0`
+	CurrentVersion = `v1.0.1`
 	EOLBaseURL     = "https://endoflife.date/api"
 	NotAvailable   = "N/A"
 )
@@ -40,20 +40,8 @@ type Product struct {
 	AdditionalFields     map[string]interface{} `json:"-"`
 }
 
-// GetSupportedPHPVersions returns the supported PHP versions as a string
-func (p *Product) GetSupportedPHPVersions() string {
-	switch v := p.SupportedPHPVersions.(type) {
-	case string:
-		return v
-	case float64:
-		return fmt.Sprintf("%.1f", v)
-	default:
-		return "N/A"
-	}
-}
-
-// IsSupportedSoftwareVersion ...
-func (c *Client) IsSupportedSoftwareVersion(softwareName string, version float64) (bool, error) {
+// IsSupportedSoftwareVersion checks if a given software version is supported
+func (c *Client) IsSupportedSoftwareVersion(softwareName string, version string) (bool, error) {
 	softwareReleaseData, err := c.GetProduct(softwareName)
 	if err != nil {
 		return false, LogError(err)
@@ -66,23 +54,28 @@ func (c *Client) IsSupportedSoftwareVersion(softwareName string, version float64
 }
 
 // IsVersionSupported checks if the given version is supported in any of the product cycles
-func (p Products) IsVersionSupported(version float64) (bool, error) {
+func (p Products) IsVersionSupported(versionStr string) (bool, error) {
+	version, err := semver.NewVersion(versionStr)
+	if err != nil {
+		return false, fmt.Errorf("invalid version string: %s", versionStr)
+	}
+
 	for _, product := range p {
-		productCycle, err := strconv.ParseFloat(product.Cycle, 64)
+		constraint, err := semver.NewConstraint(product.Cycle)
 		if err != nil {
-			continue // Skip invalid cycles
+			// If the cycle is not a valid constraint, skip it
+			continue
 		}
 
-		if productCycle == version {
+		if constraint.Check(version) {
 			eolDate, err := product.GetEOLDate()
 			if err != nil {
 				return false, err
 			}
-
 			return time.Now().Before(eolDate), nil
 		}
 	}
-	return false, fmt.Errorf("version %.1f not found in any product cycle", version)
+	return false, fmt.Errorf("version %s not found in any product cycle", versionStr)
 }
 
 // GetEOLDate returns the end-of-life date for the product

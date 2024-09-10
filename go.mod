@@ -3,6 +3,7 @@ module github.com/mr-pmillz/eoldate
 go 1.22.1
 
 require (
+	github.com/Masterminds/semver/v3 v3.2.1
 	github.com/gocarina/gocsv v0.0.0-20240520201108-78e41c74b4b1
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/projectdiscovery/gologger v1.1.22
