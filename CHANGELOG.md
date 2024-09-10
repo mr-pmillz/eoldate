@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented [here](https://github.com/mr-pmillz/eoldate/blob/main/CHANGELOG.md?ref_type=heads)
 
+## [1.0.2](https://github.com/mr-pmillz/eoldate/compare/v1.0.1...v1.0.2) - 2024-09-10
+
+### ✨ New features
+
+- Added support for versions less than lowest cycle version - ([3b0125d](https://github.com/mr-pmillz/eoldate/commit/3b0125ddc7014ad0d20d2ce8b1975eecf3357b23))
+
+### 🛠 Improvements
+
+- Updated README.md example code - ([995b24e](https://github.com/mr-pmillz/eoldate/commit/995b24efc0a182ed3e320ebaf226581a80974f8b))
+- Update CHANGELOG.md - ([5e79a8a](https://github.com/mr-pmillz/eoldate/commit/5e79a8ab26e150d3f7483cba4579656adfa60db5))
+
 ## [1.0.1](https://github.com/mr-pmillz/eoldate/compare/v1.0.0...v1.0.1) - 2024-09-10
 
 ### ✨ New features
