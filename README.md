@@ -68,7 +68,6 @@ func main() {
 	latestVersionInfo := fmt.Sprintf("The latest version of %s at the time of testing was %s.", strings.ToUpper(softwareName), latestVersion)
 	if isPHPVersionSupported {
 		fmt.Printf("%s %s is Supported. %s", softwareName, phpVersion, latestVersionInfo)
-		//fmt.Sprintf("The latest version of %s at the time of testing was %s.", softwareName, latestVersion.String())
 	} else {
 		fmt.Printf("%s %s is no longer Supported. %s", softwareName, phpVersion, latestVersionInfo)
 	}
