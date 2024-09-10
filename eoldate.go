@@ -5,12 +5,13 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"slices"
 	"strconv"
 	"time"
 )
 
 const (
-	CurrentVersion = `v0.0.9`
+	CurrentVersion = `v1.0.0`
 	EOLBaseURL     = "https://endoflife.date/api"
 	NotAvailable   = "N/A"
 )
@@ -39,38 +40,6 @@ type Product struct {
 	AdditionalFields     map[string]interface{} `json:"-"`
 }
 
-// UnmarshalJSON implements the json.Unmarshaler interface
-func (p *Product) UnmarshalJSON(data []byte) error {
-	type ProductAlias Product
-	alias := &struct {
-		*ProductAlias
-		AdditionalFields map[string]interface{} `json:"-"`
-	}{
-		ProductAlias: (*ProductAlias)(p),
-	}
-
-	if err := json.Unmarshal(data, &alias); err != nil {
-		return err
-	}
-
-	var raw map[string]interface{}
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return err
-	}
-
-	p.AdditionalFields = make(map[string]interface{})
-	for k, v := range raw {
-		switch k {
-		case "cycle", "releaseDate", "eol", "latest", "link", "latestReleaseDate", "lts", "support", "extendedSupport", "minJavaVersion", "supportedPHPVersions":
-			// These fields are already handled by the struct
-		default:
-			p.AdditionalFields[k] = v
-		}
-	}
-
-	return nil
-}
-
 // GetSupportedPHPVersions returns the supported PHP versions as a string
 func (p *Product) GetSupportedPHPVersions() string {
 	switch v := p.SupportedPHPVersions.(type) {
@@ -81,6 +50,19 @@ func (p *Product) GetSupportedPHPVersions() string {
 	default:
 		return "N/A"
 	}
+}
+
+// IsSupportedSoftwareVersion ...
+func (c *Client) IsSupportedSoftwareVersion(softwareName string, version float64) (bool, error) {
+	softwareReleaseData, err := c.GetProduct(softwareName)
+	if err != nil {
+		return false, LogError(err)
+	}
+	isSupported, err := softwareReleaseData.IsVersionSupported(version)
+	if err != nil {
+		return false, LogError(err)
+	}
+	return isSupported, nil
 }
 
 // IsVersionSupported checks if the given version is supported in any of the product cycles
@@ -165,18 +147,46 @@ type Products []Product
 
 // GetProduct fetches the end-of-life information for a specific product.
 func (c *Client) GetProduct(product string) (Products, error) {
-	data, err := c.Get(fmt.Sprintf("%s.json", product))
+	allProducts, err := c.CacheTechnologies()
 	if err != nil {
 		return nil, err
 	}
+	if slices.Contains(allProducts, product) {
+		var products Products
+		productCache, err := readCache(product)
+		if err != nil {
+			return nil, err
+		}
+		if productCache != nil {
+			err = json.Unmarshal(productCache, &products)
+			return products, err
+		}
+		data, err := c.Get(fmt.Sprintf("%s.json", product))
+		if err != nil {
+			return nil, err
+		}
 
-	var products Products
-	err = json.Unmarshal(data, &products)
-	return products, err
+		if err = json.Unmarshal(data, &products); err != nil {
+			return nil, err
+		}
+		if err = writeCache(product, data); err != nil {
+			return nil, err
+		}
+		return products, err
+	} else {
+		return nil, fmt.Errorf("product %s not found", product)
+	}
 }
 
 // GetAllProducts fetches the end-of-life information for all products.
 func (c *Client) GetAllProducts() (AllProducts, error) {
+	allProductsCache, err := readAllTechnologiesCache()
+	if err != nil {
+		return nil, LogError(err)
+	}
+	if allProductsCache != nil {
+		return allProductsCache, nil
+	}
 	data, err := c.Get("all.json")
 	if err != nil {
 		return nil, err

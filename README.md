@@ -18,7 +18,7 @@ This is a wrapper around the endoflife.date API
 
 ## Installation
 
-To install, just run the below command or download pre-compiled binary from the [releases page](https://github.com/mr-pmillz/eoldate/releases)
+To install, run the following command or download a pre-compiled binary from the [releases page](https://github.com/mr-pmillz/eoldate/releases)
 
 ```shell
 go install -v github.com/mr-pmillz/eoldate/cmd/eoldate@latest
@@ -58,25 +58,16 @@ import (
 
 func main() {
 	client := eoldate.NewClient()
-	products, err := client.GetProduct("php")
+	softwareName := "php"
+	phpVersion := 8.2
+	isPHPEightPointTwoSupported, err := client.IsSupportedSoftwareVersion(softwareName, phpVersion)
 	if err != nil {
-		log.Fatalf("Error fetching product data: %v", err)
+		log.Fatal(err)
 	}
-
-	versionsToCheck := []float64{5.6, 7.4, 8.0, 8.1, 8.2}
-
-	for _, version := range versionsToCheck {
-		supported, err := products.IsVersionSupported(version)
-		if err != nil {
-			fmt.Printf("PHP %.1f: %v\n", version, err)
-			continue
-		}
-
-		if supported {
-			fmt.Printf("PHP %.1f is still supported\n", version)
-		} else {
-			fmt.Printf("PHP %.1f is no longer supported\n", version)
-		}
+	if isPHPEightPointTwoSupported {
+		fmt.Printf("%s %.1f is Supported", softwareName, phpVersion)
+	} else {
+		fmt.Printf("%s %.1f is not Supported", softwareName, phpVersion)
 	}
 }
 ```

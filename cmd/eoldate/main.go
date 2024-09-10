@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"github.com/olekukonko/tablewriter"
@@ -63,22 +62,17 @@ func main() {
 		os.Exit(1)
 	}
 
-	data, err := client.Get(fmt.Sprintf("%s.json", eolOptions.Tech))
+	data, err := client.GetProduct(eolOptions.Tech)
 	if err != nil {
 		gologger.Fatal().Msgf("Error fetching product data: %v", err)
 	}
 
-	var products []eoldate.Product
-	if err = json.Unmarshal(data, &products); err != nil {
-		gologger.Fatal().Msgf("Error parsing JSON: %v", err)
-	}
-
-	tableBuilder := NewTableBuilder(products)
+	tableBuilder := NewTableBuilder(data)
 	tableString := tableBuilder.Render()
 	fmt.Println(tableString)
 
 	if eolOptions.Output != "" {
-		writeOutputFiles(eolOptions, tableString, products)
+		writeOutputFiles(eolOptions, tableString, data)
 	}
 }
 
