@@ -7,11 +7,12 @@ import (
 	"io"
 	"net/http"
 	"slices"
+	"strings"
 	"time"
 )
 
 const (
-	CurrentVersion = `v1.0.3`
+	CurrentVersion = `v1.0.4`
 	EOLBaseURL     = "https://endoflife.date/api"
 	NotAvailable   = "N/A"
 )
@@ -40,70 +41,68 @@ type Product struct {
 	AdditionalFields     map[string]interface{} `json:"-"`
 }
 
-// IsSupportedSoftwareVersion checks if a given software version is supported
-func (c *Client) IsSupportedSoftwareVersion(softwareName string, version string) (bool, string, error) {
-	softwareReleaseData, err := c.GetProduct(softwareName)
+// IsSupportedSoftwareVersion checks if a given software version is supported and returns relevant information
+func (c *Client) IsSupportedSoftwareVersion(softwareName string, version string) (bool, string, *Product, error) {
+	softwareReleaseData, err := c.GetProduct(strings.ToLower(softwareName))
 	if err != nil {
-		return false, "", LogError(err)
+		return false, "", nil, LogError(err)
 	}
 
-	isSupported, err := softwareReleaseData.IsVersionSupported(version)
+	isSupported, matchingProduct, err := softwareReleaseData.IsVersionSupported(version)
 	if err != nil {
-		return false, "", LogError(err)
+		return false, "", nil, LogError(err)
 	}
 
 	latestVersion, err := softwareReleaseData.GetLatestSupportedVersion()
 	if err != nil {
-		return false, "", LogError(err)
+		return false, "", nil, LogError(err)
 	}
 
 	latestVersionStr := latestVersion.String()
 
-	return isSupported, latestVersionStr, nil
+	return isSupported, latestVersionStr, matchingProduct, nil
 }
 
 // IsVersionSupported checks if the given version is supported in any of the product cycles
-func (p Products) IsVersionSupported(versionStr string) (bool, error) {
+func (p Products) IsVersionSupported(versionStr string) (bool, *Product, error) {
 	version, err := semver.NewVersion(versionStr)
 	if err != nil {
-		return false, fmt.Errorf("invalid version string: %s", versionStr)
+		return false, nil, fmt.Errorf("invalid version string: %s", versionStr)
 	}
 
-	// Find the lowest cycle version
 	var lowestCycle *semver.Version
+	var lowestProduct *Product
+
 	for _, product := range p {
 		cycleVersion, err := semver.NewVersion(product.Cycle)
 		if err != nil {
-			// If the cycle is not a valid version, skip it
 			continue
 		}
 		if lowestCycle == nil || cycleVersion.LessThan(lowestCycle) {
 			lowestCycle = cycleVersion
+			lowestProduct = &product
 		}
 	}
 
-	// If the version is lower than the lowest cycle, it's not supported
 	if lowestCycle != nil && version.LessThan(lowestCycle) {
-		return false, nil
+		return false, lowestProduct, nil
 	}
 
-	// Check if the version is in any of the cycles
 	for _, product := range p {
 		constraint, err := semver.NewConstraint(product.Cycle)
 		if err != nil {
-			// If the cycle is not a valid constraint, skip it
 			continue
 		}
 
 		if constraint.Check(version) {
 			eolDate, err := product.GetEOLDate()
 			if err != nil {
-				return false, err
+				return false, &product, err
 			}
-			return time.Now().Before(eolDate), nil
+			return time.Now().Before(eolDate), &product, nil
 		}
 	}
-	return false, nil
+	return false, nil, nil
 }
 
 // GetLatestSupportedVersion returns the latest supported version from a list of Products
@@ -125,6 +124,29 @@ func (p Products) GetLatestSupportedVersion() (*semver.Version, error) {
 		return nil, fmt.Errorf("no valid versions found")
 	}
 	return latestVersion, nil
+}
+
+// GetEndDate ...
+func (p *Product) GetEndDate() *time.Time {
+	if p == nil {
+		return nil
+	}
+
+	// Check Support field first
+	if support, ok := p.Support.(string); ok {
+		if t, err := time.Parse("2006-01-02", support); err == nil {
+			return &t
+		}
+	}
+
+	// If Support is not available or invalid, check EOL
+	if eol, ok := p.EOL.(string); ok {
+		if t, err := time.Parse("2006-01-02", eol); err == nil {
+			return &t
+		}
+	}
+
+	return nil
 }
 
 // GetEOLDate returns the end-of-life date for the product

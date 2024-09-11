@@ -9,6 +9,7 @@ import (
 	"os/user"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 // Exists returns whether the given file or directory exists
@@ -156,4 +157,44 @@ func ResolveAbsPath(path string) (string, error) {
 	}
 
 	return path, nil
+}
+
+// CalculateTimeDifference calculates the difference between the current date and the given endDate
+func CalculateTimeDifference(endDate time.Time) (int, int, int) {
+	now := time.Now()
+	if endDate.After(now) {
+		// For future dates
+		return diffDates(now, endDate)
+	}
+	// For past dates or current date
+	return diffDates(endDate, now)
+}
+
+// diffDates calculates the difference between two dates
+func diffDates(start, end time.Time) (int, int, int) {
+	years := end.Year() - start.Year()
+	months := int(end.Month() - start.Month())
+	days := end.Day() - start.Day()
+
+	// Adjust for negative months
+	if months < 0 {
+		years--
+		months += 12
+	}
+
+	// Adjust for negative days
+	if days < 0 {
+		months--
+		// Get the last day of the previous month
+		lastMonth := end.AddDate(0, -1, 0)
+		days += lastMonth.AddDate(0, 1, -lastMonth.Day()).Day()
+	}
+
+	// Adjust for negative months again (in case day adjustment caused it)
+	if months < 0 {
+		years--
+		months += 12
+	}
+
+	return years, months, days
 }
