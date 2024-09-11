@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented [here](https://github.com/mr-pmillz/eoldate/blob/main/CHANGELOG.md?ref_type=heads)
 
+## [1.0.4](https://github.com/mr-pmillz/eoldate/compare/v1.0.3...v1.0.4) - 2024-09-11
+
+### 🛠 Improvements
+
+- Update CHANGELOG.md - ([c0c4310](https://github.com/mr-pmillz/eoldate/commit/c0c4310fbff5d2320d69437d838058a72dd2b14b))
+
+### ⚙️ Miscellaneous
+
+- Return matched Product data to function calls - ([ec4ee11](https://github.com/mr-pmillz/eoldate/commit/ec4ee11b9a4bd34b4ba2e86d89f05bcefbc04a1f))
+
 ## [1.0.3](https://github.com/mr-pmillz/eoldate/compare/v1.0.2...v1.0.3) - 2024-09-10
 
 ### ⚡ Performance
