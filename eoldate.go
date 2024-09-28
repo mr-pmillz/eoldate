@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	CurrentVersion = `v1.0.4`
+	CurrentVersion = `v1.0.5`
 	EOLBaseURL     = "https://endoflife.date/api"
 	NotAvailable   = "N/A"
 )

@@ -254,7 +254,7 @@ func (tb *TableBuilder) colorizeRow(row []string) []tablewriter.Colors {
 	colors := make([]tablewriter.Colors, len(row))
 	for i, header := range tb.headers {
 		switch strings.ToLower(header) {
-		case "eol", "support":
+		case "eol", "support", "extendedsupport":
 			colors[i] = tb.getDateColor(row[i])
 		}
 	}
