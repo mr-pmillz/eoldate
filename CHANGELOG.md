@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented [here](https://github.com/mr-pmillz/eoldate/blob/main/CHANGELOG.md?ref_type=heads)
 
+## [1.0.5](https://github.com/mr-pmillz/eoldate/compare/v1.0.4...v1.0.5) - 2024-09-28
+
+### ✨ New features
+
+- Add color to extended support date - ([37d435a](https://github.com/mr-pmillz/eoldate/commit/37d435affba8517c65518d355a18fe4a53347cff))
+
+### 🛠 Improvements
+
+- Update CHANGELOG.md - ([2e29850](https://github.com/mr-pmillz/eoldate/commit/2e298500111b603722f97ae66124dd045c99fbe9))
+
 ## [1.0.4](https://github.com/mr-pmillz/eoldate/compare/v1.0.3...v1.0.4) - 2024-09-11
 
 ### 🛠 Improvements
