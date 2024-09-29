@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	CurrentVersion = `v1.0.5`
+	CurrentVersion = `v1.0.6`
 	EOLBaseURL     = "https://endoflife.date/api"
 	NotAvailable   = "N/A"
 )
@@ -42,25 +42,23 @@ type Product struct {
 }
 
 // IsSupportedSoftwareVersion checks if a given software version is supported and returns relevant information
-func (c *Client) IsSupportedSoftwareVersion(softwareName string, version string) (bool, string, *Product, error) {
+func (c *Client) IsSupportedSoftwareVersion(softwareName string, version string) (bool, *semver.Version, *Product, error) {
 	softwareReleaseData, err := c.GetProduct(strings.ToLower(softwareName))
 	if err != nil {
-		return false, "", nil, LogError(err)
+		return false, nil, nil, LogError(err)
 	}
 
 	isSupported, matchingProduct, err := softwareReleaseData.IsVersionSupported(version)
 	if err != nil {
-		return false, "", nil, LogError(err)
+		return false, nil, nil, LogError(err)
 	}
 
 	latestVersion, err := softwareReleaseData.GetLatestSupportedVersion()
 	if err != nil {
-		return false, "", nil, LogError(err)
+		return false, nil, nil, LogError(err)
 	}
 
-	latestVersionStr := latestVersion.String()
-
-	return isSupported, latestVersionStr, matchingProduct, nil
+	return isSupported, latestVersion, matchingProduct, nil
 }
 
 // IsVersionSupported checks if the given version is supported in any of the product cycles

@@ -65,7 +65,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	latestVersionInfo := fmt.Sprintf("The latest version of %s on %v was %s.", softwareName, time.Now().Format("01-02-2006"), latestVersion)
+	latestVersionInfo := fmt.Sprintf("The latest version of %s on %v was %s.", softwareName, time.Now().Format("01-02-2006"), latestVersion.String())
 
 	endDate := product.GetEndDate()
 	if isSupported {
