@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented [here](https://github.com/mr-pmillz/eoldate/blob/main/CHANGELOG.md?ref_type=heads)
 
+## [1.0.6](https://github.com/mr-pmillz/eoldate/compare/v1.0.5...v1.0.6) - 2024-09-29
+
+### 🛠 Improvements
+
+- Updated IsSupportedSoftwareVersion to return a *semver.Version object - ([1e8c7dd](https://github.com/mr-pmillz/eoldate/commit/1e8c7dd0529d8a73742a63cca117dc1e5274d8f1))
+- Update changelog - ([77c28e9](https://github.com/mr-pmillz/eoldate/commit/77c28e9f37d3965aa2d4568f282392b94209f415))
+
+### ⚙️ Miscellaneous
+
+- Dep bumped goreleaser to v2 in ci - ([1e8c7dd](https://github.com/mr-pmillz/eoldate/commit/1e8c7dd0529d8a73742a63cca117dc1e5274d8f1))
+
 ## [1.0.5](https://github.com/mr-pmillz/eoldate/compare/v1.0.4...v1.0.5) - 2024-09-28
 
 ### ✨ New features
