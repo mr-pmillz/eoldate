@@ -15,3 +15,13 @@ release_notes/*
 coverage
 coverage/
 coverage/*
+report.xml
+coverage.xml
+git-cliff*
+git-cliff*/
+git-cliff-*.tar.gz
+git-cliff-2.7.0/
+git-cliff-*/*
+*.tar.gz
+*.tgz
+todo.md

@@ -1,15 +1,16 @@
+project_name: eoldate
+version: 2
 env:
   - GO111MODULE=on
+  - GITHUB_TOKEN={{ .Env.GITHUB_TOKEN }}
 before:
   hooks:
     # You may remove this if you don't use go modules.
     - go mod tidy
 builds:
-  - env:
-      - CGO_ENABLED=0
+  - env: [CGO_ENABLED=0]
     id: eoldate
     binary: eoldate
-    main: cmd/eoldate/main.go
     flags:
       - -trimpath
     asmflags:
@@ -20,16 +21,13 @@ builds:
       -s -w
     goos:
       - linux
+      - darwin
     goarch:
       - amd64
       - arm64
 
 archives:
   - id: tgz
-    format: tar.gz
-    format_overrides:
-      - goos: windows
-        format: zip
 
 checksum:
   name_template: 'checksums.txt'
@@ -40,3 +38,39 @@ changelog:
     exclude:
       - '^docs:'
       - '^test:'
+
+dockers:
+  - image_templates:
+      - "ghcr.io/mr-pmillz/{{ .ProjectName }}:{{ .Tag }}-amd64"
+      - "ghcr.io/mr-pmillz/{{ .ProjectName }}:latest-amd64"
+    goarch: amd64
+    dockerfile: goreleaser.dockerfile
+    use: buildx
+    build_flag_templates:
+      - "--pull"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.url=https://github.com/mr-pmillz/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/mr-pmillz/{{.ProjectName}}"
+      - "--platform=linux/amd64"
+    extra_files:
+      - entrypoint.sh
+  - image_templates:
+      - "ghcr.io/mr-pmillz/{{ .ProjectName }}:{{ .Tag }}-arm64"
+      - "ghcr.io/mr-pmillz/{{ .ProjectName }}:latest-arm64"
+    goarch: arm64
+    dockerfile: goreleaser.dockerfile
+    use: buildx
+    build_flag_templates:
+      - "--pull"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.url=https://github.com/mr-pmillz/{{.ProjectName}}"
+      - "--label=org.opencontainers.image.source=https://github.com/mr-pmillz/{{.ProjectName}}"
+      - "--platform=linux/arm64"
+    extra_files:
+      - entrypoint.sh

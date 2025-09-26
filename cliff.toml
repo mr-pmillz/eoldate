@@ -4,6 +4,7 @@
 [remote.github]
 owner = "mr-pmillz"
 repo = "eoldate"
+# token = ""
 
 [changelog]
 # changelog header
@@ -14,6 +15,19 @@ All notable changes to this project will be documented [here](https://github.com
 # template for the changelog body
 # https://keats.github.io/tera/docs/#introduction
 body = """
+### Commit Statistics
+
+- {{ statistics.commit_count }} commit(s) contributed to the release.
+- {{ statistics.commits_timespan | default(value=0) }} day(s) passed between the first and last commit.
+- {{ statistics.conventional_commit_count }} commit(s) parsed as conventional.
+- {{ statistics.links | length }} linked issue(s) detected in commits.
+
+{%- for link in statistics.links %}
+      {{ "  " }}- [{{ link.text }}]({{ link.href }}) (referenced {{ link.count }} time(s))
+{%- endfor %}
+
+- {{ statistics.days_passed_since_last_release }} day(s) passed between releases.
+
 {%- macro remote_url() -%}
   https://github.com/{{ remote.github.owner }}/{{ remote.github.repo }}
 {%- endmacro -%}
@@ -64,22 +78,27 @@ postprocessors = []
 # parse the commits based on https://www.conventionalcommits.org
 conventional_commits = false
 # filter out the commits that are not conventional
-filter_unconventional = false
+filter_unconventional = true
 # process each line of a commit as an individual commit
-split_commits = true
+split_commits = false
 # regex for parsing and grouping commits
 commit_parsers = [
     { message = "^.*: add", group = "<!-- 0 -->✨ New features" },
     { message = "^add", group = "<!-- 0 -->✨ New features" },
+    { message = "^added", group = "<!-- 0 -->✨ New features" },
     { message = "^feat*", group = "<!-- 0 -->✨: New features" },
     { message = "^.* support", group = "<!-- 0 -->✨ New features" },
     { message = "^fix*", group = "<!-- 1 -->🐛 Bug fixes" },
     { message = "^.* resolved", group = "<!-- 1 -->🐛 Bug fixes" },
     { message = "^.*: fix", group = "<!-- 1 -->🐛 Bug fixes" },
+    { message = "^.* bug", group = "<!-- 1 -->🐛 Bug fixes" },
+    { message = "^bug", group = "<!-- 1 -->🐛 Bug fixes" },
     { message = "^refactor*", group = "<!-- 2 -->🚜 Refactor" },
     { message = "^doc", group = "<!-- 3 -->📚 Documentation" },
     { message = "^perf", group = "<!-- 4 -->⚡ Performance" },
     { message = "^optimized", group = "<!-- 4 -->⚡ Performance" },
+    { message = "^optimize", group = "<!-- 4 -->⚡ Performance" },
+    { message = "^Optimize", group = "<!-- 4 -->⚡ Performance" },
     { message = "^enhanced", group = "<!-- 4 -->⚡ Performance" },
     { message = "^style", group = "<!-- 5 -->🎨 Styling" },
     { message = "^test*", group = "<!-- 6 -->🧪 Testing" },
@@ -91,8 +110,8 @@ commit_parsers = [
     { message = "^chore\\(deps.*\\)", skip = true },
     { message = "^chore\\(pr\\)", skip = true },
     { message = "^chore\\(pull\\)", skip = true },
-    { message = "^.*", group = "<!-- 9 -->⚙️ Miscellaneous" },
-    { message = "^chore|^ci", group = "<!-- 10 -->⚙️ Miscellaneous Tasks" },
+    { message = "^.*", group = "<!-- 9 -->⚙️  Miscellaneous" },
+    { message = "^chore|^ci", group = "<!-- 10 -->⚙️  Miscellaneous Tasks" },
     { body = ".*security", group = "<!--11 -->🛡️ Security" },
     { message = "^revert", group = "<!-- 12 -->◀️ Revert" },
     { message = "^.*: remove", group = "Removed" },
