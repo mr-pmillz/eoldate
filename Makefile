@@ -54,13 +54,13 @@ clean:
 build:
 	go env -w GOFLAGS=-mod=mod
 	go mod tidy
-	go build -v -trimpath -ldflags="-s -w" .
+	go build -v -trimpath -ldflags="-s -w" ./cmd/eoldate
 
 compile:
-	GOOS=linux GOARCH=amd64 go build -o bin/linux/amd64/eoldate-$(CURRENT_TAG)-linux-amd64 -trimpath -ldflags="-s -w" main.go
-	GOOS=linux GOARCH=arm64 go build -o bin/linux/arm64/eoldate-$(CURRENT_TAG)-linux-arm64 -trimpath -ldflags="-s -w" main.go
-	GOOS=darwin GOARCH=amd64 go build -o bin/darwin/amd64/eoldate-$(CURRENT_TAG)-x86_64-macos-darwin_amd64 -trimpath -ldflags="-s -w" main.go
-	GOOS=darwin GOARCH=arm64 go build -o bin/darwin/arm64/eoldate-$(CURRENT_TAG)-x86_64-macos-darwin_arm64 -trimpath -ldflags="-s -w" main.go
+	GOOS=linux GOARCH=amd64 go build -o bin/linux/amd64/eoldate-$(CURRENT_TAG)-linux-amd64 -trimpath -ldflags="-s -w" ./cmd/eoldate
+	GOOS=linux GOARCH=arm64 go build -o bin/linux/arm64/eoldate-$(CURRENT_TAG)-linux-arm64 -trimpath -ldflags="-s -w" ./cmd/eoldate
+	GOOS=darwin GOARCH=amd64 go build -o bin/darwin/amd64/eoldate-$(CURRENT_TAG)-x86_64-macos-darwin_amd64 -trimpath -ldflags="-s -w" ./cmd/eoldate
+	GOOS=darwin GOARCH=arm64 go build -o bin/darwin/arm64/eoldate-$(CURRENT_TAG)-x86_64-macos-darwin_arm64 -trimpath -ldflags="-s -w" ./cmd/eoldate
 
 compress:
 	gzip -9 bin/linux/amd64/eoldate-$(CURRENT_TAG)-linux-amd64

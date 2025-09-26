@@ -6,7 +6,7 @@ RUN apk add --no-cache build-base
 WORKDIR /app
 COPY . /app
 RUN go mod download
-RUN GOOS=linux GOARCH=amd64 go build -v -trimpath -ldflags="-s -w" -o /eoldate .
+RUN GOOS=linux GOARCH=amd64 go build -v -trimpath -ldflags="-s -w" -o /eoldate ./cmd/eoldate
 RUN rm -rf /app
 
 FROM alpine:latest
