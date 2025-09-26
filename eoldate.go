@@ -3,16 +3,17 @@ package eoldate
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/Masterminds/semver/v3"
 	"io"
 	"net/http"
 	"slices"
 	"strings"
 	"time"
+
+	"github.com/Masterminds/semver/v3"
 )
 
 const (
-	CurrentVersion = `v1.0.6`
+	CurrentVersion = `v1.0.7`
 	EOLBaseURL     = "https://endoflife.date/api"
 	NotAvailable   = "N/A"
 )
@@ -36,7 +37,7 @@ type Product struct {
 	LTS                  interface{}            `json:"lts,omitempty"`
 	Support              interface{}            `json:"support,omitempty"`
 	ExtendedSupport      interface{}            `json:"extendedSupport,omitempty"`
-	MinJavaVersion       *float64               `json:"minJavaVersion,omitempty"`
+	MinJavaVersion       string                 `json:"minJavaVersion,omitempty"`
 	SupportedPHPVersions interface{}            `json:"supportedPHPVersions,omitempty"`
 	AdditionalFields     map[string]interface{} `json:"-"`
 }
