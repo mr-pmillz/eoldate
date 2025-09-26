@@ -9,8 +9,9 @@ on:
 
 permissions:
   contents: write
-  # packages: write
-  # issues: write
+  packages: write
+  attestations: write
+  id-token: write
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -19,7 +20,7 @@ jobs:
     # The type of runner that the job will run on
     strategy:
       matrix:
-        go-version: [1.21, 1.22, 1.23]
+        go-version: [1.23, 1.24]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
 
@@ -41,11 +42,12 @@ jobs:
           go env -w GOFLAGS=-mod=mod
           go mod tidy
           go build -v -o eoldate ./cmd/eoldate/main.go
+
   test:
     needs: build
     strategy:
       matrix:
-        go-version: [1.21, 1.22, 1.23]
+        go-version: [1.23]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
@@ -58,19 +60,28 @@ jobs:
           go-version: ${{ matrix.go-version }}
           cache: true
 
-      - name: Install dependencies
-        run: go get github.com/mattn/go-isatty@v0.0.16
+      - name: Set GOPATH
+        run: |
+          echo "GOPATH=$(go env GOPATH)/bin" >> $GITHUB_ENV
+
+      # Install gotestfmt on the VM running the action.
+      - name: Set up gotestfmt
+        uses: GoTestTools/gotestfmt-action@v2
+        with:
+          # Optional: pass GITHUB_TOKEN to avoid rate limiting.
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       # Run Tests
       - name: Tests
         run: |
-          make -f Makefile test || true
+          set -euo pipefail
+          go test -json -v ./... 2>&1 | tee coverage/gotest.log | gotestfmt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Upload the original go test log as an artifact for later review.
       - name: Upload test log
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: test-log
@@ -83,49 +94,14 @@ jobs:
     steps:
       - uses: actions/setup-go@v5
         with:
-          go-version: 1.22
+          go-version: 1.23
       - uses: actions/checkout@v4
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v4
+        uses: golangci/golangci-lint-action@v7
         with:
-          # Optional: version of golangci-lint to use in form of v1.2 or v1.2.3 or `latest` to use the latest version
           version: latest
           # Optional: golangci-lint command line arguments.
           args: --config ./.golangci-lint.yml
-
-  changelog:
-    needs: [build, golangci]
-    if: startsWith(github.ref, 'refs/tags/v')
-    name: Generate changelog
-    runs-on: ubuntu-latest
-    outputs:
-      release_body: ${{ steps.git-cliff.outputs.content }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Generate a changelog
-        uses: orhun/git-cliff-action@v3
-        id: git-cliff
-        with:
-          config: cliff.toml
-          args: -r . --latest
-        env:
-          OUTPUT: RELEASE_CHANGELOG.md
-          GITHUB_REPO: ${{ github.repository }}
-
-      - name: copy release changelog
-        run: |
-          mkdir -p release_notes
-          cat RELEASE_CHANGELOG.md > release_notes/RELEASE_CHANGELOG.md
-
-      - name: upload release changelog
-        uses: actions/upload-artifact@master
-        with:
-          name: release-changelog
-          path: release_notes
 
   # ================
   # RELEASE JOB
@@ -133,7 +109,7 @@ jobs:
   #   only runs on push "*" tag
   # ================
   release:
-    needs: [build, golangci, changelog]
+    needs: [build, test, golangci]
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     steps:
@@ -146,26 +122,37 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version: 1.22
+          go-version: 1.23
           cache: true
 
       - name: Set GOPATH
         run: |
           echo "GOPATH=$(go env GOPATH)/bin" >> $GITHUB_ENV
 
-      - name: retrieve release changelog
-        uses: actions/download-artifact@master
+      - name: Generate changelog
+        uses: orhun/git-cliff-action@v4
         with:
-          name: release-changelog
-          path: release_notes
+          config: cliff.toml
+          args: -r .  --latest
+        env:
+          OUTPUT: RELEASE_CHANGELOG.md
+          GITHUB_REPO: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         if: startsWith(github.ref, 'refs/tags/v')
         with:
           distribution: goreleaser
-          version: "~> v2"
-          args: release --clean --release-notes release_notes/RELEASE_CHANGELOG.md
+          version: latest
+          args: release --clean --release-notes RELEASE_CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -174,3 +161,39 @@ jobs:
         with:
           name: eoldate
           path: dist/*
+
+  # ================
+  # Generate CHANGELOG.md after release finishes to avoid git in a dirty state error.
+  #   only runs on push "*" tag
+  # ================
+  changelog:
+    name: Generate changelog
+    needs: [ build, test, golangci, release ]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate changelog
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          args: --verbose
+        env:
+          OUTPUT: CHANGELOG.md
+          GITHUB_REPO: ${{ github.repository }}
+
+      - name: Commit
+        run: |
+          git checkout main
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          set +e
+          git add CHANGELOG.md
+          git commit -m "Update changelog"
+          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git main
