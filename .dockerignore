@@ -8,7 +8,6 @@ docs/*
 *.json
 *.yml
 *.yaml
-*.sh
 Makefile
 README.md
 coverage/*

@@ -2,7 +2,6 @@
 .idea/
 .idea/*
 *.txt
-*.sh
 *.yaml
 *.json
 *.log
