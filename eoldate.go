@@ -16,6 +16,8 @@ const (
 	CurrentVersion = `v1.1.3`
 	EOLBaseURL     = "https://endoflife.date/api"
 	NotAvailable   = "N/A"
+	// HTTPTimeout is the maximum duration for HTTP requests to the endoflife.date API.
+	HTTPTimeout = 60 * time.Second
 )
 
 // Options ...
@@ -184,7 +186,7 @@ type Client struct {
 // NewClient creates a new API client with the given base URL.
 func NewClient() *Client {
 	return &Client{
-		httpClient: &http.Client{},
+		httpClient: &http.Client{Timeout: HTTPTimeout},
 		baseURL:    EOLBaseURL,
 	}
 }
