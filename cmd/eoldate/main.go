@@ -144,7 +144,7 @@ func (tb *TableBuilder) determineHeaders() {
 }
 
 // isEmptyValue checks if a value is considered empty
-func isEmptyValue(v interface{}) bool {
+func isEmptyValue(v any) bool {
 	if v == nil {
 		return true
 	}
@@ -157,9 +157,9 @@ func isEmptyValue(v interface{}) bool {
 		return value == 0
 	case float32, float64:
 		return value == 0
-	case []interface{}:
+	case []any:
 		return len(value) == 0
-	case map[string]interface{}:
+	case map[string]any:
 		return len(value) == 0
 	case *float64:
 		return value == nil
@@ -194,7 +194,7 @@ func (tb *TableBuilder) buildRows() {
 }
 
 // formatValue converts an interface{} value to a string representation
-func (tb *TableBuilder) formatValue(v interface{}) string {
+func (tb *TableBuilder) formatValue(v any) string {
 	if v == nil {
 		return eoldate.NotAvailable
 	}
@@ -219,7 +219,7 @@ func (tb *TableBuilder) formatValue(v interface{}) string {
 		return fmt.Sprintf("%t", value)
 	case time.Time:
 		return value.Format("2006-01-02")
-	case interface{}:
+	case any:
 		return fmt.Sprintf("%v", value)
 	default:
 		return fmt.Sprintf("%v", value)

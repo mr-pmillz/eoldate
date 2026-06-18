@@ -28,18 +28,18 @@ type Options struct {
 
 // Product represents the structure of the JSON data
 type Product struct {
-	Cycle                string                 `json:"cycle,omitempty"`
-	ReleaseDate          string                 `json:"releaseDate,omitempty"`
-	EOL                  interface{}            `json:"eol,omitempty"`
-	Latest               string                 `json:"latest,omitempty"`
-	Link                 string                 `json:"link,omitempty"`
-	LatestReleaseDate    string                 `json:"latestReleaseDate,omitempty"`
-	LTS                  interface{}            `json:"lts,omitempty"`
-	Support              interface{}            `json:"support,omitempty"`
-	ExtendedSupport      interface{}            `json:"extendedSupport,omitempty"`
-	MinJavaVersion       string                 `json:"minJavaVersion,omitempty"`
-	SupportedPHPVersions interface{}            `json:"supportedPHPVersions,omitempty"`
-	AdditionalFields     map[string]interface{} `json:"-"`
+	Cycle                string         `json:"cycle,omitempty"`
+	ReleaseDate          string         `json:"releaseDate,omitempty"`
+	EOL                  any            `json:"eol,omitempty"`
+	Latest               string         `json:"latest,omitempty"`
+	Link                 string         `json:"link,omitempty"`
+	LatestReleaseDate    string         `json:"latestReleaseDate,omitempty"`
+	LTS                  any            `json:"lts,omitempty"`
+	Support              any            `json:"support,omitempty"`
+	ExtendedSupport      any            `json:"extendedSupport,omitempty"`
+	MinJavaVersion       string         `json:"minJavaVersion,omitempty"`
+	SupportedPHPVersions any            `json:"supportedPHPVersions,omitempty"`
+	AdditionalFields     map[string]any `json:"-"`
 }
 
 // IsSupportedSoftwareVersion checks if a given software version is supported and returns relevant information

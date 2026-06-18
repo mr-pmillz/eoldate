@@ -85,7 +85,7 @@ func ReadLines(path string) ([]string, error) {
 }
 
 // WriteStructToJSONFile ...
-func WriteStructToJSONFile(data interface{}, outputFile string) error {
+func WriteStructToJSONFile(data any, outputFile string) error {
 	outputFileDir := filepath.Dir(outputFile)
 	if err := os.MkdirAll(outputFileDir, 0750); err != nil {
 		return LogError(err)
@@ -103,7 +103,7 @@ func WriteStructToJSONFile(data interface{}, outputFile string) error {
 }
 
 // WriteStructToCSVFile ...
-func WriteStructToCSVFile(data interface{}, outputFile string) error {
+func WriteStructToCSVFile(data any, outputFile string) error {
 	outputFileDir := filepath.Dir(outputFile)
 	if err := os.MkdirAll(outputFileDir, 0750); err != nil {
 		return LogError(err)
