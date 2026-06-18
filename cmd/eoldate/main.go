@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/olekukonko/tablewriter"
 	"os"
 	"reflect"
 	"sort"
@@ -12,6 +11,7 @@ import (
 
 	"github.com/mr-pmillz/eoldate"
 	"github.com/projectdiscovery/gologger"
+	"github.com/pterm/pterm"
 )
 
 func main() {
@@ -68,7 +68,10 @@ func main() {
 	}
 
 	tableBuilder := NewTableBuilder(data)
-	tableString := tableBuilder.Render()
+	tableString, err := tableBuilder.Render()
+	if err != nil {
+		gologger.Fatal().Msgf("Error rendering table: %v", err)
+	}
 	fmt.Println(tableString)
 
 	if eolOptions.Output != "" {
@@ -223,55 +226,54 @@ func (tb *TableBuilder) formatValue(v interface{}) string {
 	}
 }
 
-// Render creates and renders the table
-func (tb *TableBuilder) Render() string {
-	var buf strings.Builder
-	table := tablewriter.NewWriter(&buf)
-	table.SetHeader(tb.headers)
-	table.SetAutoWrapText(false)
-	table.SetAutoFormatHeaders(true)
-	table.SetHeaderAlignment(tablewriter.ALIGN_CENTER)
-	table.SetAlignment(tablewriter.ALIGN_CENTER)
+// Render creates and renders the table as a string
+func (tb *TableBuilder) Render() (string, error) {
+	tableData := make(pterm.TableData, 0, len(tb.rows)+1)
 
-	// Set header colors
-	headerColors := make([]tablewriter.Colors, len(tb.headers))
-	for i := range headerColors {
-		headerColors[i] = tablewriter.Colors{tablewriter.Bold, tablewriter.FgHiYellowColor, tablewriter.BgBlackColor}
+	// First row is the header. Uppercase to match the previous header styling.
+	header := make([]string, len(tb.headers))
+	for i, h := range tb.headers {
+		header[i] = strings.ToUpper(h)
 	}
-	table.SetHeaderColor(headerColors...)
+	tableData = append(tableData, header)
 
+	// Append data rows with date columns colorized by EOL status.
 	for _, row := range tb.rows {
-		colors := tb.colorizeRow(row)
-		table.Rich(row, colors)
+		tableData = append(tableData, tb.colorizeRow(row))
 	}
 
-	table.Render()
-	return buf.String()
+	return pterm.DefaultTable.
+		WithHasHeader().
+		WithBoxed().
+		WithHeaderStyle(pterm.NewStyle(pterm.FgLightYellow, pterm.Bold)).
+		WithData(tableData).
+		Srender()
 }
 
-// colorizeRow applies color to specific columns based on their values
-func (tb *TableBuilder) colorizeRow(row []string) []tablewriter.Colors {
-	colors := make([]tablewriter.Colors, len(row))
+// colorizeRow returns a copy of the row with date columns colorized based on their values
+func (tb *TableBuilder) colorizeRow(row []string) []string {
+	colored := make([]string, len(row))
+	copy(colored, row)
 	for i, header := range tb.headers {
 		switch strings.ToLower(header) {
 		case "eol", "support", "extendedsupport":
-			colors[i] = tb.getDateColor(row[i])
+			colored[i] = tb.colorizeDate(row[i])
 		}
 	}
-	return colors
+	return colored
 }
 
-// getDateColor returns the appropriate color based on the date value
-func (tb *TableBuilder) getDateColor(dateStr string) tablewriter.Colors {
+// colorizeDate colors a date string green when it is in the future and red when it is in the past
+func (tb *TableBuilder) colorizeDate(dateStr string) string {
 	date, err := tb.parseDate(dateStr)
 	if err != nil {
-		return tablewriter.Colors{}
+		return dateStr
 	}
 
 	if date.Before(time.Now()) {
-		return tablewriter.Colors{tablewriter.FgRedColor}
+		return pterm.FgRed.Sprint(dateStr)
 	}
-	return tablewriter.Colors{tablewriter.FgGreenColor}
+	return pterm.FgGreen.Sprint(dateStr)
 }
 
 // parseDate attempts to parse a date string in various formats
