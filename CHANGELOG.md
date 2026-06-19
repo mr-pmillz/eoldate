@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented [here](https://github.com/mr-pmillz/eoldate/blob/main/CHANGELOG.md?ref_type=heads)
 
+## [1.1.5](https://github.com/mr-pmillz/eoldate/compare/v1.1.4...v1.1.5) - 2026-06-19
+
+### ⚙️  Miscellaneous
+
+- Version bump go.mod deps - ([c7ea5e2](https://github.com/mr-pmillz/eoldate/commit/c7ea5e28cdc60be3b3fb30bed1297831804827f2))
+- Update changelog - ([fc50f14](https://github.com/mr-pmillz/eoldate/commit/fc50f14cd6a55fdec5177e79baa19b49ad0c8578))
+
 ## [1.1.4](https://github.com/mr-pmillz/eoldate/compare/v1.1.3...v1.1.4) - 2026-06-18
 
 ### ✨ New features
