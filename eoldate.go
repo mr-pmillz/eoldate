@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	CurrentVersion = `v1.1.4`
+	CurrentVersion = `v1.1.5`
 	EOLBaseURL     = "https://endoflife.date/api"
 	NotAvailable   = "N/A"
 	// HTTPTimeout is the maximum duration for HTTP requests to the endoflife.date API.
